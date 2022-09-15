@@ -1,0 +1,25 @@
+{
+  "name": "embla-carousel-snap-class",
+  "version": "1.0.1",
+  "author": "Julian Hubatsch",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "description": "A plugin for Embla Carousel that adds a class to the snapped slide.",
+  "scripts": {
+    "pre-build": "rm -rf dist",
+    "build": "npm run pre-build && tsup index.ts --format=esm --dts --clean"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.3"
+  },
+  "peerDependencies": {
+    "embla-carousel": "^7.0.3"
+  }
+}
