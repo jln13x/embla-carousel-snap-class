@@ -1,0 +1,23 @@
+body {
+  background: black;
+  display: grid;
+  height: 100vh;
+}
+
+.embla {
+  margin: auto 0;
+  overflow: hidden;
+}
+.embla__container {
+  width: 100%;
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 25%;
+  color: white;
+  opacity: 40%;
+}
+
+.embla__slide.is-snap {
+  opacity: 100%;
+}

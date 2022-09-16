@@ -21,32 +21,53 @@ const SnapClass = (
     // Move instance one level up to handle destroy
     embla = e;
     e.on("init", onInit);
+    e.on("reInit", onInit);
     e.on("select", onSelect);
     e.on("destroy", onDestroy);
   };
 
-  const onInit = () => {
-    console.log("foo");
-    const curIdx = embla.selectedScrollSnap();
-    const curSnapElement = embla.slideNodes()[curIdx];
+  const getSlidesToScroll = () => {
+    const slidesToScroll = embla.internalEngine().options.slidesToScroll;
 
-    if (curSnapElement) {
-      addClass(curSnapElement);
-    }
+    // What do we return here?
+    if (slidesToScroll === "auto") return 1;
+
+    // Clamp to total number of slides
+    return Math.min(slidesToScroll, embla.slideNodes().length);
+  };
+
+  const removeClassesFromPreviousSnappedSlides = () => {
+    const previousSnapIndex = embla.previousScrollSnap();
+    const slidesToScroll = getSlidesToScroll();
+
+    const slideNodes = embla.slideNodes();
+
+    const previousSnapElements = slideNodes.slice(
+      previousSnapIndex * slidesToScroll,
+      previousSnapIndex * slidesToScroll + slidesToScroll
+    );
+    previousSnapElements.forEach((element) => removeClass(element));
+  };
+
+  const addClassesToSnappedSlides = () => {
+    const slideNodes = embla.slideNodes();
+    const currentSnapIndex = embla.selectedScrollSnap();
+    const slidesToScroll = getSlidesToScroll();
+
+    const currentSnapElements = slideNodes.slice(
+      currentSnapIndex * slidesToScroll,
+      currentSnapIndex * slidesToScroll + slidesToScroll
+    );
+    currentSnapElements.forEach((element) => addClass(element));
+  };
+
+  const onInit = () => {
+    addClassesToSnappedSlides();
   };
 
   const onSelect = () => {
-    const prevIdx = embla.previousScrollSnap();
-    const prevSnapElement = embla.slideNodes()[prevIdx];
-    const curIdx = embla.selectedScrollSnap();
-    const curSnapElement = embla.slideNodes()[curIdx];
-
-    if (prevSnapElement) {
-      removeClass(prevSnapElement);
-    }
-    if (curSnapElement) {
-      addClass(curSnapElement);
-    }
+    removeClassesFromPreviousSnappedSlides();
+    addClassesToSnappedSlides();
   };
 
   const onDestroy = () => {
